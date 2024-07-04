@@ -16,9 +16,9 @@ class _HomeState extends State<Home> {
 
   // first, make sure to add the initial event to subsequently handle other states. This will be handled by the framework state management.f
   @override
-  void setState(VoidCallback fn) {
-    //homeBloc.add(HomeInitialEvent());
-    super.setState(fn);
+  void initState() {
+    homeBloc.add(HomeInitialEvent());
+    super.initState();
   }
 
   @override
@@ -29,27 +29,38 @@ class _HomeState extends State<Home> {
       buildWhen: (previous, current) => current is! HomeActionState,
       listener: (context, state) {
         if (state is HomeNavigationToWishListPageActionState) {
-          Navigator.push(context, MaterialPageRoute(builder: (context) =>  const WishListPage(),),);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const WishListPage(),
+            ),
+          );
         } else {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => const CartPage(),),);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const CartPage(),
+            ),
+          );
         }
       },
       builder: (context, state) {
-        return initUI();
-        // switch(state.runtimeType) {
-        //   // case HomeLoadingState _:
-        //   //   return const CircularProgressIndicator();
-        //   case HomeLoadedSuccessState _:
-        //     return initUI();
-        //   case HomeErrorState _:
-        //     return const Scaffold(
-        //       body: Center(
-        //         child: Text('Error loading ui'),
-        //       ),
-        //     );
-        //   default:
-        //     return const SizedBox();
-        // }
+        switch (state.runtimeType) {
+          case const (HomeLoadingState):
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          case const (HomeLoadedSuccessState):
+            return initUI();
+          case const (HomeErrorState):
+            return const Scaffold(
+              body: Center(
+                child: Text('Error loading ui'),
+              ),
+            );
+          default:
+            return const SizedBox();
+        }
       },
     );
   }

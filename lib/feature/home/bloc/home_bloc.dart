@@ -30,15 +30,17 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     await Future.delayed(const Duration(seconds: 3));
     // assuming data is done loading, lets emit the HomeLoadedSuccessState and pass in the required information to the state.
     emit(
-      HomeLoadedSuccessState(
+      HomeLoadedSuccessState(productDataModel:
         GroceryData.groceryList
             .map(
               (e) => ProductDataModel(
-                  productName: e['productName'], quantity: e['quantity']),
+                  productName: e['name'], quantity: e['quantity']),
             )
             .toList(),
       ),
     );
+
+    debugPrint('homeInitialEvent done firing');
   }
 
   FutureOr<void> homeWishListButtonNavigateEvent(
