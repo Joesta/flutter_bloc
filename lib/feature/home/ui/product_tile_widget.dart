@@ -1,22 +1,25 @@
-
+import 'package:bloc_tut/feature/home/bloc/home_bloc.dart';
 import 'package:bloc_tut/feature/home/model/product_data_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ProductTileWidget extends StatelessWidget {
   final ProductDataModel productDataModel;
-  const ProductTileWidget({super.key, required this.productDataModel});
+  final HomeBloc homeBloc;
+
+  const ProductTileWidget(
+      {super.key, required this.productDataModel, required this.homeBloc});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.all(10),
       padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration (
+      decoration: BoxDecoration(
         color: Colors.black.withAlpha(100),
         borderRadius: BorderRadius.circular(10),
       ),
-      child: Column (
+      child: Column(
         children: [
           Text(productDataModel.productName),
           Row(
@@ -27,13 +30,19 @@ class ProductTileWidget extends StatelessWidget {
                 children: [
                   IconButton(
                     onPressed: () {
-                      //homeBloc.add(HomeWishListButtonNavigateEvent());
+                      homeBloc.add(
+                        HomeProductWishListButtonClickedEvent(
+                            clickedProduct: productDataModel),
+                      );
                     },
                     icon: const Icon(Icons.favorite_border_outlined),
                   ),
                   IconButton(
                     onPressed: () {
-                     // homeBloc.add(HomeCartButtonNavigateEvent());
+                      homeBloc.add(
+                        HomeProductCartButtonClickedEvent(
+                            clickedProduct: productDataModel),
+                      );
                     },
                     icon: const Icon(Icons.shopping_cart_outlined),
                   ),
