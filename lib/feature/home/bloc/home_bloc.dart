@@ -3,8 +3,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:bloc_tut/data/grocery_data.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:meta/meta.dart';
-
 import '../model/product_data_model.dart';
 
 part 'home_event.dart';
@@ -28,10 +26,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     emit(HomeLoadingState());
     // after loading, assume we are now reading from data source to retrieve data.
     await Future.delayed(const Duration(seconds: 3));
-    // assuming data is done loading, lets emit the HomeLoadedSuccessState and pass in the required information to the state.
+    // assuming data is done loading, lets emit the HomeLoadedSuccessState and pass in the required field to the state.
     emit(
-      HomeLoadedSuccessState(productDataModel:
-        GroceryData.groceryList
+      HomeLoadedSuccessState(
+        productDataModel: GroceryData.groceryList
             .map(
               (e) => ProductDataModel(
                   productName: e['name'], quantity: e['quantity']),

@@ -1,7 +1,10 @@
 import 'package:bloc_tut/feature/cart/ui/cart_page.dart';
 import 'package:bloc_tut/feature/home/bloc/home_bloc.dart';
+import 'package:bloc_tut/feature/home/ui/product_tile_widget.dart';
 import 'package:bloc_tut/feature/wishlist/ui/wish_list_page.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Home extends StatefulWidget {
@@ -47,17 +50,12 @@ class _HomeState extends State<Home> {
       builder: (context, state) {
         switch (state.runtimeType) {
           case const (HomeLoadingState):
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return _showLoadingIndicator();
           case const (HomeLoadedSuccessState):
-            return initUI();
+            final successSate = state as HomeLoadedSuccessState;
+            return _initUI(successSate);
           case const (HomeErrorState):
-            return const Scaffold(
-              body: Center(
-                child: Text('Error loading ui'),
-              ),
-            );
+            return _showHomeErrorState();
           default:
             return const SizedBox();
         }
@@ -65,28 +63,49 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget initUI() {
+  Widget _showHomeErrorState() {
+    return const Scaffold(
+      body: Center(
+        child: Text('Error loading ui'),
+      ),
+    );
+  }
+
+  Widget _showLoadingIndicator() {
+    return const Scaffold(
+        body: Center(
+      child: CircularProgressIndicator(),
+    ));
+  }
+
+  Widget _initUI(HomeLoadedSuccessState successSate) {
     debugPrint('initUI loading');
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Bloc Tut'),
-          actions: [
-            IconButton(
-              onPressed: () {
-                homeBloc.add(HomeWishListButtonNavigateEvent());
-              },
-              icon: const Icon(Icons.favorite_border_outlined),
-            ),
-            IconButton(
-              onPressed: () {
-                homeBloc.add(HomeCartButtonNavigateEvent());
-              },
-              icon: const Icon(Icons.shopping_cart_outlined),
-            ),
-          ],
-        ),
-      ),
+          appBar: AppBar(
+            title: const Text('Bloc Tut'),
+            actions: [
+              IconButton(
+                onPressed: () {
+                  homeBloc.add(HomeWishListButtonNavigateEvent());
+                },
+                icon: const Icon(Icons.favorite_border_outlined),
+              ),
+              IconButton(
+                onPressed: () {
+                  homeBloc.add(HomeCartButtonNavigateEvent());
+                },
+                icon: const Icon(Icons.shopping_cart_outlined),
+              ),
+            ],
+          ),
+          body: ListView.builder(
+            itemCount: successSate.productDataModel.length,
+            itemBuilder: (context, index) {
+              return ProductTileWidget(
+                  productDataModel: successSate.productDataModel[index]);
+            },
+          )),
     );
   }
 }
