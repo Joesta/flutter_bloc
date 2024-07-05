@@ -6,7 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class CartProductListview extends StatelessWidget {
   final ProductDataModel productDataModel;
   final CartBloc cartBloc;
-  const CartProductListview({super.key, required this.productDataModel, required this.cartBloc});
+
+  const CartProductListview(
+      {super.key, required this.productDataModel, required this.cartBloc});
 
   @override
   Widget build(BuildContext context) {
@@ -26,19 +28,12 @@ class CartProductListview extends StatelessWidget {
               Text("R${productDataModel.quantity}"),
               Row(
                 children: [
-                  // IconButton(
-                  //   onPressed: () { null
-                  //     );
-                  //   },
-                  //   icon: const Icon(Icons.favorite_border_outlined),
-                  // ),
-                  // IconButton(
-                  //   onPressed: () {
-                  //
-                  //     );
-                  //   },
-                  //   icon: const Icon(Icons.shopping_cart_outlined),
-                  // ),
+                  IconButton(
+                      onPressed: () {
+                        cartBloc.add(CartItemRemoveEvent(
+                            productDataModel: productDataModel));
+                      },
+                      icon: const Icon(Icons.delete))
                 ],
               )
             ],
@@ -47,4 +42,4 @@ class CartProductListview extends StatelessWidget {
       ),
     );
   }
-}
+} //
